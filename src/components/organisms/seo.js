@@ -1,5 +1,8 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
+import BreadCrumbs from "../moleculas/breadcrumbs-schema"
+import Organization from "../moleculas/organization-schema"
+import Post from "../moleculas/post-schema"
 
 export function Head({ data, pageContext }) {
   const seo = data.wpPage?.seo || data.wpPost?.seo
@@ -19,14 +22,14 @@ export function Head({ data, pageContext }) {
 
   return (
     <>
+      <BreadCrumbs siteMetadata={siteMetadata} pageContext={pageContext} />
+      <Organization siteMetadata={siteMetadata} />
+      <Post siteMetadata={siteMetadata} canonical={canonical} data={data.wpPost} context={pageContext} />
+
       <html lang="pl" />
       <meta charSet="utf-8" />
       <meta property="og:site_name" content={seo.opengraphSiteName || siteMetadata.title} />
       <meta name="robots" content="noindex" />  { /* remove on production  */}
-
-      {pageContext?.alternates?.map(el => ( // Only for multi-language sites
-        <link rel="alternate" href={el.uri} hreflang={canonical + el.hreflang} />
-      ))}
 
       <link rel="canonical" href={canonical} />
       <meta property="og:url" content={canonical} />
