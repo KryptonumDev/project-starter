@@ -36,7 +36,7 @@ module.exports = {
         schema: {
           timeout: 3000000,
         },
-        "url": "http://project-starter.test/graphql"
+        "url": "https://wp-url/graphql"
       }
     },
     {
@@ -47,32 +47,32 @@ module.exports = {
         defaultDataLayer: { platform: "gatsby" },
       },
     },
-    // {
-    //   resolve: "gatsby-plugin-yoast-sitemap",
-    //   options: {
-    //     baseUrl : "http://project-starter.test",
-    //     gatsbyUrl : 'https://gatsby.url',
-    //   },
-    // },
+    {
+      resolve: "gatsby-plugin-yoast-sitemap",
+      options: {
+        baseUrl : "https://wp-url",
+        gatsbyUrl : 'https://gatsby.url',
+      },
+    },
     {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
         host: 'https://gatsby.url',
-        sitemap: 'http://project-starter.test/sitemap-index.xml',
+        sitemap: 'https://wp-url/sitemap-index.xml',
         policy: [{userAgent: '*', allow: '/'}]
       }
     },
-    // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: `Kryptonum Project Starter`,
-    //     short_name: `Kryptonum PS`,
-    //     start_url: `/`,
-    //     background_color: `#ffffff`,
-    //     theme_color: `#ffffff`,
-    //     display: `standalone`,
-    //     icon: `src/resources/images/favicon.png` // This path is relative to the root of the site.
-    //   },
-    // }
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Kryptonum Project Starter`,
+        short_name: `Kryptonum PS`,
+        start_url: `/`,
+        background_color: `#ffffff`,
+        theme_color: `#ffffff`,
+        display: `standalone`,
+        icon: `src/resources/images/favicon.png` // This path is relative to the root of the site.
+      },
+    }
   ]
 }
