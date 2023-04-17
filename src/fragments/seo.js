@@ -31,3 +31,18 @@ export const wpPostSeoFragment = graphql`
         }
     }
 `
+
+export const wpCategorySeoFragment = graphql`
+    fragment CategorySEO on WpCategory {
+        seo {
+            title
+            metaDesc
+            opengraphSiteName
+            opengraphImage {
+                localFile {
+                    publicURL
+                }
+            }
+        }
+    }
+`

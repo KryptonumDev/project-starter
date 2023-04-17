@@ -17,7 +17,7 @@ export default function Post({ canonical, data, siteMetadata }) {
           "description": data.seo.metaDesc || siteMetadata.description,
           "image": {
             "@type": "ImageObject",
-            "url": data.seo.opengraphImage.localFile.publicURL || siteMetadata.image,
+            "url": data.seo.opengraphImage?.localFile?.publicURL || siteMetadata.image,
           },
           "datePublished": data.dateGtm,
           "dateModified": data.modifiedGmt,

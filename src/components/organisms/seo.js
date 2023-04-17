@@ -5,7 +5,8 @@ import Organization from "../moleculas/organization-schema"
 import Post from "../moleculas/post-schema"
 
 export function Head({ data, pageContext }) {
-  const seo = data.wpPage?.seo || data.wpPost?.seo
+  const seo = data.wpPage?.seo || data.wpPost?.seo || data.wpCategory?.seo
+  debugger
   const { site: { siteMetadata } } = useStaticQuery(graphql`
   query {
       site {
