@@ -34,45 +34,62 @@ module.exports = {
       resolve: 'gatsby-source-wordpress',
       options: {
         schema: {
-          timeout: 3000000,
+          timeout: 300000000,
         },
-        "url": "https://wp-url/graphql"
+        "url": "https://www-data.inwedo.com/graphql"
       }
     },
-    {
-      resolve: "gatsby-plugin-google-tagmanager",
-      options: {
-        id: "GTM-0000000",
-        includeInDevelopment: true,
-        defaultDataLayer: { platform: "gatsby" },
-      },
-    },
-    {
-      resolve: "gatsby-plugin-yoast-sitemap",
-      options: {
-        baseUrl : "https://wp-url",
-        gatsbyUrl : 'https://gatsby.url',
-      },
-    },
+    // {
+    //   resolve: "gatsby-plugin-google-tagmanager",
+    //   options: {
+    //     id: "GTM-0000000",
+    //     includeInDevelopment: true,
+    //     defaultDataLayer: { platform: "gatsby" },
+    //   },
+    // },
+    // {
+    //   resolve: "gatsby-plugin-yoast-sitemap",
+    //   options: {
+    //     baseUrl : "https://wp-url",
+    //     gatsbyUrl : 'https://gatsby.url',
+    //   },
+    // },
     {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
         host: 'https://gatsby.url',
         sitemap: 'https://wp-url/sitemap-index.xml',
-        policy: [{userAgent: '*', allow: '/'}]
+        policy: [{ userAgent: '*', allow: '/' }]
       }
     },
+    // {
+    //   resolve: `gatsby-plugin-manifest`,
+    //   options: {
+    //     name: `Kryptonum Project Starter`,
+    //     short_name: `Kryptonum PS`,
+    //     start_url: `/`,
+    //     background_color: `#ffffff`,
+    //     theme_color: `#ffffff`,
+    //     display: `standalone`,
+    //     icon: `src/resources/images/favicon.png` // This path is relative to the root of the site.
+    //   },
+    // }
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: `gatsby-plugin-postbuild`,
       options: {
-        name: `Kryptonum Project Starter`,
-        short_name: `Kryptonum PS`,
-        start_url: `/`,
-        background_color: `#ffffff`,
-        theme_color: `#ffffff`,
-        display: `standalone`,
-        icon: `src/resources/images/favicon.png` // This path is relative to the root of the site.
-      },
+        events: {
+          html: {
+            node: ({ node }) => {
+              const orphans = ['a', 'i', 'o', 'u', 'w', 'z', 'np.'];
+              const orphansRegex = new RegExp(` (${orphans.join('|')}) `, 'gi');
+              if (node.nodeName === "#text") {
+                node.value = node.value.replace(orphansRegex, ` $1\u00A0`)
+              }
+              return node
+            }
+          }
+        }
+      }
     }
   ]
 }
