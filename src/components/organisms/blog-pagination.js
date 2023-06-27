@@ -1,15 +1,15 @@
 import React, { useMemo } from "react"
 import styled from "styled-components"
 import { Link } from "gatsby"
- 
-// urlBasis = 'https://example.com/blog/'
- 
+// import { PAGE_ITEM_COUNT } from "../../../constants/blog"
+
+// urlBasis = '/blog/'
+
 export default function Pagination({ currentPage, itemCount, urlBasis }) {
   const pagesCount = useMemo(() => {
-    let count = itemCount - 10
-    return (Math.ceil(count / 9)) + 1
+    return (Math.ceil(itemCount / PAGE_ITEM_COUNT))
   }, [itemCount])
- 
+
   const buttons = useMemo(() => {
     let arr = []
     for (let i = 0; i < pagesCount; i++) {
@@ -17,23 +17,33 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
     }
     return arr
   }, [pagesCount])
- 
-  if (itemCount < 11) {
+
+  if (pagesCount < 2) {
     return null
   }
- 
+
   return (
     <Wrapper>
-      <Button as={currentPage <= 1 ? 'button' : null} to={`${urlBasis}${currentPage - 1}`} className='arrow left' >
-        <svg width="20" height="32" viewBox="0 0 20 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17 3L3 16L17 29" stroke="#EDAC2A" stroke-width="3" stroke-linecap="square" />
-        </svg>
+      <Button
+        as={currentPage <= 1 ? 'button' : null}
+        disabled
+        to={currentPage >= 3
+          ? `${urlBasis}${currentPage - 1}`
+          : `${urlBasis}`}
+        className='arrow'
+      >
+        {/* TODO: LEFT ARROW */}
       </Button>
       <div className="center">
-        {itemCount < 51 ? (
+        {pagesCount < 5 ? (
           <>
             {buttons.map(el => (
-              <Button to={`${urlBasis}${el}`} active={currentPage === el} >
+              <Button
+                to={el >= 2
+                  ? `${urlBasis}${el}`
+                  : `${urlBasis}`}
+                active={currentPage === el}
+              >
                 {el}
               </Button>
             ))}
@@ -41,7 +51,7 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
         ) : (
           <>
             {currentPage > 3
-              && <Button to={`${urlBasis}1`} >
+              && <Button to={`${urlBasis}`} >
                 {1}
               </Button>
             }
@@ -50,7 +60,7 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
                 ...
               </Button>
             }
- 
+
             {buttons.map((el, index) => {
               if (currentPage < 4 && (index < 6)) { // first 4 pages
                 return (
@@ -61,7 +71,12 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
               }
               if (currentPage > pagesCount - 3 && (index > pagesCount - 7)) { // last 4 pages
                 return (
-                  <Button to={`${urlBasis}${el}`} active={currentPage === el}>
+                  <Button
+                    to={el >= 2
+                      ? `${urlBasis}/${el}`
+                      : `${urlBasis}`}
+                    active={currentPage === el}
+                  >
                     {el}
                   </Button>
                 )
@@ -75,7 +90,7 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
               }
               return null
             })}
- 
+
             {(currentPage === 1 || pagesCount - currentPage > 3)
               && <Button className="not" disabled>
                 ...
@@ -83,22 +98,28 @@ export default function Pagination({ currentPage, itemCount, urlBasis }) {
             }
             {(currentPage === 1 || pagesCount - currentPage > 2)
               && (
-                <Button  to={`${urlBasis}${pagesCount}`}>
+                <Button to={`${urlBasis}${pagesCount}`}>
                   {pagesCount}
                 </Button>
               )}
           </>
         )}
       </div>
-      <Button as={currentPage >= pagesCount ? 'button' : null}  to={`${urlBasis}${currentPage + 1}`} className={'arrow right'}>
-        <svg width="20" height="32" viewBox="0 0 20 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 29L17 16L3 3" stroke="#EDAC2A" stroke-width="3" stroke-linecap="square" />
-        </svg>
+      <Button
+        className='arrow'
+        as={currentPage >= pagesCount ? 'button' : null}
+        disabled
+        to={
+          currentPage < pagesCount
+            ? `${urlBasis}${currentPage + 1}`
+            : `${urlBasis}${pagesCount}`}
+      >
+        {/* TODO: RIGHT ARROW */}
       </Button>
     </Wrapper>
   )
 }
- 
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -112,7 +133,7 @@ const Wrapper = styled.div`
     gap: 25px;
   }
 `
- 
+
 const Button = styled(Link)`
   border: none;
   display: flex;
@@ -121,13 +142,16 @@ const Button = styled(Link)`
   cursor: pointer;
   position: relative;
   background-color: transparent;
+
+  ${({ active }) => active && `
+    
+  `}
  
-  &.not{
+  &.not, &:disabled{
     cursor: default;
   }
  
   &.arrow{
-    background: #23423D;
     padding: 10px;
   }
 `

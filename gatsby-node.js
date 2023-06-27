@@ -1,4 +1,5 @@
 const path = require(`path`)
+const PAGE_ITEM_COUNT = 9
 
 exports.createPages = async ({
   graphql,
@@ -76,6 +77,8 @@ exports.createPages = async ({
       urlBasis: blogPage.uri,
       archiveUrl: blogPage.uri,
       page: 1,
+      perPage: PAGE_ITEM_COUNT,
+      skip: 0,
       breadcrumbs: [
         {
           name: blogPage.title,
@@ -87,29 +90,29 @@ exports.createPages = async ({
   })
 
   // Create blog page pagination
-  if (posts.nodes.length > 9) {
-    for (let i = 0; i < Math.ceil(category.count / 9); i++) {
-      let page = i + 2
-      createPage({
-        path: blogPage.uri + page + '/',
-        component: path.resolve(`src/templates/blog.jsx`),
-        context: {
-          id: blogPage.id,
-          slug: blogPage.slug,
-          uri: blogPage.uri + page + '/',
-          urlBasis: blogPage.uri,
-          archiveUrl: blogPage.uri,
-          page: page,
-          breadcrumbs: [
-            {
-              name: blogPage.title,
-              url: blogPage.uri
-            }
-          ]
-        },
-        ownerNodeId: blogPage.id + page
-      })
-    }
+  for (let i = 1; i < Math.ceil(allSanityBlogEntries.totalCount / PAGE_ITEM_COUNT); i++) {
+    let page = i + 1
+    createPage({
+      path: blogPage.uri + page + '/',
+      component: path.resolve(`src/templates/blog.jsx`),
+      context: {
+        id: blogPage.id,
+        slug: blogPage.slug,
+        uri: blogPage.uri + page + '/',
+        urlBasis: blogPage.uri,
+        archiveUrl: blogPage.uri,
+        page: page,
+        perPage: PAGE_ITEM_COUNT,
+        skip: i * PAGE_ITEM_COUNT,
+        breadcrumbs: [
+          {
+            name: blogPage.title,
+            url: blogPage.uri
+          }
+        ]
+      },
+      ownerNodeId: blogPage.id + page
+    })
   }
 
   // Create blog categories pages
@@ -125,6 +128,8 @@ exports.createPages = async ({
         urlBasis: category.uri,
         archiveUrl: blogPage.uri,
         page: 1,
+        perPage: PAGE_ITEM_COUNT,
+        skip: 0,
         breadcrumbs: [
           {
             name: blogPage.title,
@@ -140,38 +145,36 @@ exports.createPages = async ({
     })
 
     //  Create pagination
-    if (category.count > 9) {
-      for (let i = 0; i < Math.ceil(category.count / 9); i++) {
-        let page = i + 2
-        createPage({
-          path: category.uri + page + '/',
-          component: path.resolve(`src/templates/blog-category.jsx`),
-          context: {
-            id: category.id,
-            blogArchiveId: blogPage.id,
-            slug: category.slug,
-            uri: category.uri + page + '/',
-            urlBasis: category.uri,
-            archiveUrl: blogPage.uri,
-            page: page,
-            breadcrumbs: [
-              {
-                name: blogPage.title,
-                url: blogPage.uri
-              },
-              {
-                name: category.name,
-                url: category.uri
-              }
-            ]
-          },
-          ownerNodeId: category.id + page
-        })
-      }
+    for (let i = 1; i < Math.ceil(allSanityBlogEntries.totalCount / PAGE_ITEM_COUNT); i++) {
+      let page = i + 1
+      createPage({
+        path: category.uri + page + '/',
+        component: path.resolve(`src/templates/blog-category.jsx`),
+        context: {
+          id: category.id,
+          blogArchiveId: blogPage.id,
+          slug: category.slug,
+          uri: category.uri + page + '/',
+          urlBasis: category.uri,
+          archiveUrl: blogPage.uri,
+          page: page,
+          perPage: PAGE_ITEM_COUNT,
+          skip: i * PAGE_ITEM_COUNT,
+          breadcrumbs: [
+            {
+              name: blogPage.title,
+              url: blogPage.uri
+            },
+            {
+              name: category.name,
+              url: category.uri
+            }
+          ]
+        },
+        ownerNodeId: category.id + page
+      })
     }
   });
-
-
 
   // Create blog posts pages
   posts.nodes.forEach(post => {

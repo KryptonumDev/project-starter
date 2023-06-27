@@ -11,7 +11,7 @@ export default function Layout({ children, location }) {
     const orphans = ['a', 'i', 'o', 'u', 'w', 'z', 'np.'];
     const orphansRegex = new RegExp(` (${orphans.join('|')}) `, 'gi');
     const paragraphs = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, a, button'));
-    
+
     paragraphs.forEach(paragraph =>
       paragraph.childNodes.forEach(node =>
         node?.nodeType === Node.TEXT_NODE && (node.textContent = node.textContent.replace(orphansRegex, ` $1\u00A0`))

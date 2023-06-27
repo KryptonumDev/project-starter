@@ -14,11 +14,11 @@ export default function BlogPage({ pageContext, data: { allWpPost, allWpCategory
 export { Head } from '../components/organisms/seo'
 
 export const query = graphql`
-  query category($id: String!, $slug: String!) {
+  query category($perPage: Int!, $skip: Int!, $id: String!, $slug: String!) {
     wpCategory(id: {eq: $id}) {
       ...CategorySEO
     }
-    allWpPost(filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}) {
+    allWpPost(limit: $perPage, skip: $skip, sort: {_createdAt: DESC}, filter: {categories: {nodes: {elemMatch: {slug: {eq: $slug}}}}}) {
       nodes {
         uri
         title

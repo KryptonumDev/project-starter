@@ -2,28 +2,18 @@ import React from "react";
 import Card from "../moleculas/blog-card";
 import styled from "styled-components";
 
-const pageItemConunt = 9;
-
-export default function Grid({ posts, currentPage }) {
+export default function Grid({ posts }) {
   return (
     <Wrapper>
-      {posts.map((el, index) => {
-        if (
-          index >= (pageItemConunt - 1) * (currentPage - 1) + (currentPage - 1) &&
-          index <= (pageItemConunt - 1) * currentPage + (currentPage - 1)
-        ) {
-          return (
-            <Card key={el.uri + index} data={el} />
-          )
-        }
-        return null
-      })}
+      {posts.map((el, index) => (
+        <Card key={el.uri + index} data={el} />
+      ))}
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 60px;
 `

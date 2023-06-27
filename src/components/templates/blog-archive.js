@@ -6,8 +6,8 @@ import Pagination from "../organisms/blog-pagination";
 export default function BlogArchive({ context, posts, categories }) {
   return (
     <div>
-      <Filter urlBasis={context.archiveUrl} categories={categories}/>
-      <Grid currentPage={context.page} posts={posts}/>
+      <Filter urlBasis={context.archiveUrl} categories={categories} />
+      <Grid posts={posts} />
       <Pagination urlBasis={context.urlBasis} currentPage={context.page} itemCount={posts.length} />
     </div>
   )
