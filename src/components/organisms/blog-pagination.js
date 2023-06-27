@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import styled from "styled-components"
 import { Link } from "gatsby"
-// import { PAGE_ITEM_COUNT } from "../../../constants/blog"
+import { PAGE_ITEM_COUNT } from "./../../constants/blog"
 
 // urlBasis = '/blog/'
 
